@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Table</title>
+    <style>
+      *{
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: black;
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        font-size: 15px;
+
+      }
+      header {
+        width: 100%;
+      }
+
+      /* TABLE */
+        table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        th,
+        td {
+            height: 30px;
+            padding: 5px 19px;
+            border: 1px solid #dddddd;
+            text-align: left;
+        }
+
+        th {
+            color: #777777;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        /* Table links */
+        td a {
+            color: #0876bd;
+            text-decoration: underline;
+        }
+
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>TABLE</h1>
+    </header>
+    <table class="periodic-table">
+      <tr 1>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+      </tr>
+      <tr 2>
+        <td>1</td>
+        <td colspan="6"></td>
+        <td>8</td>
+        </tr>
+        <tr 3>
+        <td>1</td>
+        <td rowspan="2">2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+       </tr>
+       <tr 3>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5</td>
+        <td>6</td>
+        <td>7</td>
+        <td>8</td>
+      </tr>
+    </table>
+    <h2>COLSPAN</h2>
+    <table class="table-colspan">
+      <tr>
+        <td>H<br><small>1</small></td>
+        <td colspan="16"></td>
+        <td>He<br><small>2</small></td>
+      </tr>
+      <tr>
+        <td>Li<br><small>3</small></td>
+        <td>Be<br><small>4</small></td>
+        <td colspan="10"></td>
+        <td>B<br><small>5</small></td>
+        <td>C<br><small>6</small></td>
+        <td>N<br><small>7</small></td>
+        <td>O<br><small>8</small></td>
+        <td>F<br><small>9</small></td>
+        <td>Ne<br><small>10</small></td>
+      </tr></table>
+      <h2>EXPERIMENT</h2>
+      <table class="experiment">          ← вся таблиця
+        <tr>          ← рядок
+          <th>       ← заголовок
+          <th>       ← заголовок
+          <th>       ← заголовок
+        </tr>
+
+        <tr>          ← другий рядок
+         <td>       ← комірка
+         <td>       ← комірка
+         <td>       ← комірка
+       </tr>
+      </table>
+  </body>
+</html>
