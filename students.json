@@ -1,0 +1,20 @@
+[
+    {
+        "name": "Павло",
+        "group": "4sc-21",
+        "subject": "Python",
+        "marks": 3
+    },
+    {
+        "name": "Іван",
+        "group": "4sc-22",
+        "subject": "Java",
+        "marks": 4
+    },
+    {
+        "name": "Василь",
+        "group": "4sc-23",
+        "subject": "Python",
+        "marks": 5
+    }
+]
