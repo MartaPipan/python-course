@@ -1,0 +1,11 @@
+
+ Залежності та requirements.txt (Dependencies)
+
+Залежності — це сторонні бібліотеки (пакети), які ви встановлюєте через команду pip. Для керування ними використовують файл requirements.txt.
+• Встановлення бібліотеки: pip install requests
+• Збереження списку всіх залежностей проєкту: pip freeze > requirements.txt
+• Приклад вмісту requirements.txt:text
+requests==2.31.0
+numpy==1.26.2
+Use o código com cuidado.
+• Встановлення всіх залежностей на іншому ПК: pip install -r requirements.txt
