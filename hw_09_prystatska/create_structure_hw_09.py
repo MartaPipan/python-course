@@ -26,7 +26,9 @@ data_to_save = [
     {"name": "Тарас", "group": "КН-11", "attended": "74", "total": "20,13,13,13,20,13"},    
     {"name": "Надія", "group": "КН-12", "attended": "74", "total": "20,19,20,20,20"},
     {"name": " ", "group": " ", "attended": " ", "total": " "}, 
-    {"name": "Софія", "group": "КН-10", "attended": "74", "total": "20"}, 
+    {"name": "Софія", "group": "КН-10", "attended": "74", "total": "20"},
+    {"name": " ", "group": "КН-12", "attended": "7", "total": "2"}, 
+    {"name": "Ян", "group": "КН-11", "attended": "17", "total": "20,17,15,17,18"}, 
 ]
 
 #  Запис у нову папку
@@ -36,5 +38,5 @@ with csv_path.open("w", encoding="utf-8", newline="") as file:
     writer.writerows(data_to_save)
 
 print(f" Папку створено за шляхом: {attendance_dir}")
-print(f" Файл записано сюди за командою у терміналі 'python hw_09_prystatska/create_structure_hw_09.py': {csv_path}")
+print(f" Файл записано за командою у терміналі 'python hw_09_prystatska/create_structure_hw_09.py сюди: {csv_path}")
 
