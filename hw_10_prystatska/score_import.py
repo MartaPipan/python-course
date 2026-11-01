@@ -8,16 +8,11 @@ from pathlib import Path
 • повертає коректне число без друку.
 """
 
-def parse_score(text: str) -> int:
-    try:
-        score = int(text)
-    except ValueError:
-        raise ValueError(f"Некоректне значення: '{text}' (має бути ціле число)")
-
+def parse_score(text):
+    score = int(text)
     if not 0 <= score <= 100:
-        raise ValueError(f"Оцінка поза діапазоном 0–100: {score}")  
+        raise ValueError(f"оцінка поза 0–100: отримано {score}")  
     return score
-
 
 """
     Імпортує та валідує оцінки студентів з CSV.
@@ -74,7 +69,7 @@ def import_scores(file_name: str = "scores.csv"):
                         "error": f"Відсутнє обов'язкове заповнення оцінки: {syntax_error_in_column_record}"
                     })
                 else:
-                    # Якщо все успішно, зберігаємо чисте число в рядок і додаємо в успішні
+                    # додаємо в успішні
                     student_row["score"] = validated_student_score
                     correct_data.append(student_row)
 
