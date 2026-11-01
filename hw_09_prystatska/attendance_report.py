@@ -8,7 +8,7 @@ output_dir = root_dir / "output"
 summary_csv_path = output_dir / "attendance_summary.csv"
 issues_text_path = output_dir / "issues.txt"
 
-# Створення папки output 
+# Ств. output 
 output_dir.mkdir(parents=True, exist_ok=True)
 
 if not input_path.exists():
