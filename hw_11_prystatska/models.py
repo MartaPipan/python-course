@@ -1,3 +1,5 @@
+import csv
+from pathlib import Path
 from datetime import datetime
 
 class DuplicateBookError(ValueError): 
@@ -76,8 +78,6 @@ class EBook(Book, Publication):
         return f"Електронна книга '{self.title}' доступна за посиланням: {self.download_url}"
 
 
-import csv
-from pathlib import Path
 
 class Library:
     def __init__(self):
@@ -85,8 +85,15 @@ class Library:
 
     def add_book(self, book: Book):
         for existing_book in self.books:
+            # Перевірка 1: Чи це той самий об'єкт у пам'яті
             if existing_book is book:
                 raise DuplicateBookError(f"Об'єкт книги '{book.title}' вже додано в цю бібліотеку")
+            
+            # Перевірка 2: Унікальність за назвою, автором ТА типом класу
+            if (existing_book.title.lower().strip() == book.title.lower().strip() and
+                existing_book.author.lower().strip() == book.author.lower().strip() and
+                type(existing_book) == type(book)):
+                raise DuplicateBookError(f"Книга '{book.title}' ({type(book).__name__}) цього автора вже є в бібліотеці")
         self.books.append(book)
 
     def find_by_author(self, author_name: str):
@@ -94,7 +101,6 @@ class Library:
         if not author_name or not isinstance(author_name, str):
             return results
         search_name = author_name.lower().strip()
-   
         for book in self.books:
             if search_name in book.author.lower():
                 results.append(book)
@@ -105,7 +111,6 @@ class Library:
         if not tag_name or not isinstance(tag_name, str):
             return results
         search_tag = tag_name.lower().strip()
-    
         for book in self.books:
             for tag in book.tags:
                 if tag.lower() == search_tag:
@@ -119,41 +124,102 @@ class Library:
             titles.append(book.title)
         return titles   
 
-    
-     
     def save_valid_books_to_csv(self, book_data=None):
         """
-        Бере вже створені, перевірені та додані через add_book об'єкти
-        зі списку self.books і зберігає їх у файл books.csv, уникаючи дублікатів.
+        Обробляє сирі дані, створює правильні об'єкти PrintedBook/EBook,
+        перевіряє наявність книг у пам'яті та у CSV, блокуючи будь-які дублікати.
         """
+        # Крок 2. Спочатку налаштуємо шлях до файлу, бо він потрібен для Кроку 1
         data_folder = Path.cwd() / "hw_11_prystatska"
         data_folder.mkdir(parents=True, exist_ok=True) 
         file_path = data_folder / "books.csv"
         
+        # Крок 3. Зчитуємо книги, які ВЖЕ є у файлі CSV, за ключем (назва, автор, тип)
+        existing_csv_books = set()
+        if file_path.exists() and file_path.stat().st_size > 0:
+            with open(file_path, mode="r", encoding="utf-8") as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    t = row.get("title", "").strip().lower()
+                    a = row.get("author", "").strip().lower()
+                    c_type = row.get("type", "").strip().lower()
+                    if t and a and c_type:
+                        existing_csv_books.add((t, a, c_type))
+
+        # Крок 1. Обробка переданого масиву словників book_data
+        if book_data is not None:
+            for item in book_data:
+                try:
+                    b_type = str(item.get("type", "")).strip().lower()
+                    title = str(item.get("title", "")).strip()
+                    author = str(item.get("author", "")).strip()
+                    
+                    if not title or not author:
+                        continue
+
+                    # 🌟 ГОЛОВНЕ ВИПРАВЛЕННЯ: Перевіряємо, чи книга вже є у файлі CSV
+                    if (title.lower(), author.lower(), b_type) in existing_csv_books:
+                        continue
+
+                    # 🌟 ГОЛОВНЕ ВИПРАВЛЕННЯ: Перевіряємо, чи книга вже є у пам'яті бібліотеки self.books
+                    already_in_memory = False
+                    for existing_book in self.books:
+                        current_obj_type = "printed" if isinstance(existing_book, PrintedBook) else "ebook"
+                        if (existing_book.title.lower().strip() == title.lower() and
+                            existing_book.author.lower().strip() == author.lower() and
+                            current_obj_type == b_type):
+                            already_in_memory = True
+                            break
+                    
+                    if already_in_memory:
+                        continue # Пропускаємо створення, якщо вона вже є в пам'яті
+
+                    # Безпечне приведення року видання
+                    raw_year = item.get("year")
+                    if isinstance(raw_year, bool):
+                        raise ValueError()
+                    year = int(raw_year) if raw_year else None
+                    
+                    # Створюємо відповідний об'єкт
+                    if b_type == "printed":
+                        raw_pages = item.get("pages_count")
+                        if isinstance(raw_pages, bool):
+                            raise ValueError()
+                        pages = int(raw_pages) if raw_pages else None
+                        book = PrintedBook(title=title, author=author, year=year, pages_count=pages)
+                    elif b_type == "ebook":
+                        url = str(item.get("download_url", "")).strip()
+                        book = EBook(title=title, author=author, year=year, download_url=url)
+                    else:
+                        continue 
+                        
+                    tags_str = item.get("tags", "")
+                    if isinstance(tags_str, str) and tags_str:
+                        for tag in tags_str.split(","):
+                            if tag.strip():
+                                book.add_tag(tag.strip())
+                                
+                    self.add_book(book)
+                except Exception:
+                    pass
+
         headers = ["title", "author", "year", "tags", "type", "pages_count", "download_url", "delivery_type"]
         
-        # 1. Зчитуємо книги, які ВЖЕ є у файлі, щоб не дописувати їх повторно
+        # Оновлюємо список вже наявних книг у CSV на випадок, якщо під час парсингу щось змінилося
         existing_books = set()
         if file_path.exists() and file_path.stat().st_size > 0:
             with open(file_path, mode="r", encoding="utf-8") as file:
-               
                 reader = csv.DictReader(file)
                 for row in reader:
-                    title = row.get("title", "").strip().lower()
-                    author = row.get("author", "").strip().lower()
-                    if title and author:
-                        # Зберігаємо (назва, автор) як унікальний ключ
-                        existing_books.add((title, author))
+                    t = row.get("title", "").strip().lower()
+                    a = row.get("author", "").strip().lower()
+                    csv_type = row.get("type", "").strip().lower()
+                    if t and a and csv_type:
+                        existing_books.add((t, a, csv_type))
 
+        # Крок 4. Фільтрація об'єктів перед безпосереднім записом
         valid_rows = []
-        
-        #  у пам'яті та фільтруємо дублікати
         for book_obj in self.books:
-            current_key = (book_obj.title.strip().lower(), book_obj.author.strip().lower())
-        
-            if current_key in existing_books:
-                continue
-
             if isinstance(book_obj, PrintedBook):
                 pages_csv = book_obj.pages_count
                 url_csv = ""
@@ -162,6 +228,11 @@ class Library:
                 pages_csv = ""
                 url_csv = book_obj.download_url
                 b_type = "ebook"
+
+            current_key = (book_obj.title.strip().lower(), book_obj.author.strip().lower(), b_type)
+        
+            if current_key in existing_books:
+                continue
 
             valid_rows.append({
                 "title": book_obj.title,
@@ -174,18 +245,17 @@ class Library:
                 "delivery_type": book_obj.delivery_description()
             })
 
+        # Крок 5. Запис унікальних рядків
         if not valid_rows:
-            print(f"ℹУсі книги з пам'яті бібліотеки вже існують у файлі {file_path.name}. Нічого не додано.")
+            print(f"ℹ️ Усі унікальні книги з пам'яті бібліотеки вже існують у файлі {file_path.name}. Нічого не додано.")
             return
 
         file_is_empty = not file_path.exists() or file_path.stat().st_size == 0
         
         with open(file_path, mode="a", encoding="utf-8", newline="") as file:
             writer = csv.DictWriter(file, fieldnames=headers)
-            
             if file_is_empty:
                 writer.writeheader()
-             
             writer.writerows(valid_rows)
             
-        print(f" Успішно додано нових книг ({len(valid_rows)}) до CSV за шляхом: {file_path}")
+        print(f"Успішно додано нових унікальних книг ({len(valid_rows)}) до CSV за шляхом: {file_path}")

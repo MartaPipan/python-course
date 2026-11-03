@@ -163,8 +163,27 @@ for current_book in library.books:
         {"title": "Фелікс Австрія", "author": "Софія Андрухович", "year": "2014", "tags": "історія", "type": "ebook", "download_url": "https://library.com"},
         # Невалідні дані для перевірки фільтрації:
         {"title": " ", "author": "Ліна Костенко", "year": "2010", "type": "printed", "pages_count": 150},
+        {"title": "Майбутній вік", "author": "Футурист", "year": "2035", "type": "printed", "pages_count": 200},
+        {"title": "Тигролови", "author": "Іван Багряний", "year": "1944", "tags": "пригоди, класика", "type": "printed", "pages_count": 320},
+        {"title": "Місто", "author": "Валер'ян Подмогильний", "year": "1928", "tags": "модернізм", "type": "printed", "pages_count": 290},
+        {"title": "Фелікс Австрія", "author": "Софія Андрухович", "year": "2014", "tags": "історія", "type": "ebook", "download_url": "https://library.com"},
+        
+        # НОВІ КНИГИ ЯК EBOOK ДЛЯ ПЕРЕВІРКИ (Мають успішно записатися, бо тип інший!)
+        {"title": "Фелікс Австрія", "author": "Софія Андрухович", "year": "2014", "tags": "історія", "type": "printed", "pages_count": 290},
+        {"title": "Тигролови", "author": "Іван Багряний", "year": "1944", "tags": "пригоди, класика, аудіо", "type": "ebook", "download_url": "https://library.com"},
+        {"title": "Місто", "author": "Валер'ян Подмогильний", "year": "1928", "tags": "модернізм, урбаністика", "type": "ebook", "download_url": "https://library.com"},
+        
+        # Дані для перевірки ігнорування тотожних дублікатів (Не мають записатися вдруге):
+        {"title": "Фелікс Австрія", "author": "Софія Андрухович", "year": "2014", "tags": "історія", "type": "ebook", "download_url": "https://library.com"},
+        
+        # Невалідні дані для перевірки фільтрації помилок (Блокуються валідаторами класу):
+        {"title": " ", "author": "Ліна Костенко", "year": "2010", "type": "printed", "pages_count": 150},
         {"title": "Майбутній вік", "author": "Футурист", "year": "2035", "type": "printed", "pages_count": 200}
     ]
+
+    print("Запускаємо імпорт, фільтрацію та збереження в CSV...")
+    library.save_valid_books_to_csv(book_data)
+
 
     print("Запускаємо імпорт та збереження...")
 
@@ -179,6 +198,6 @@ for current_book in library.books:
         print(f"   Знайдено: {b.title} | {b.delivery_description()}")
 
     print("\n" + "=" * 60)
-    print(" ДЕМО ЗАВЕРШЕНО УСПІШНО! Перевірте папку hw_11_prystatska/books.csv")
+    print(" ДЕМО ЗАВЕРШЕНО ")
     print("=" * 60)
 
