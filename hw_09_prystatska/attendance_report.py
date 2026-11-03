@@ -43,7 +43,6 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
             issues_list.append("Помилка: Ім'я студента порожнє")
             continue
 
-        # ВАЛІДАЦІЯ 
          # Перевірка студента
         allowed_symbols = " ,'-"  
         is_name_valid = True
@@ -56,7 +55,7 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
             issues_list.append(f"Некоректне ім'я (містить цифри або заборонені знаки): '{name}'")
             continue
 
-        # Перевірка attended (з рядка в число)
+        #  (з рядка в число)
         if not raw_attended.isdigit():
             issues_list.append(f"Не є числом або порожні дані 'attended' для '{name}': '{raw_attended}'")
             continue
@@ -71,7 +70,6 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
             
         total = sum(int(part) for part in total_parts)
 
-        # ділення на нуль i attended > total
         if total == 0:
             issues_list.append(f"Помилка 'total' == 0 для студента '{name}'")
             continue
@@ -134,4 +132,4 @@ print(f"\nКількість успішних записів: {valid_sum}")
 print(f"Кількість фактичних записів: {verified_count}")
 
 # Перевірка твердження (assert)
-assert valid_sum == verified_count, "Кількість записів не збігається!"
+assert valid_sum == verified_count, "Кількість записів не збігається"

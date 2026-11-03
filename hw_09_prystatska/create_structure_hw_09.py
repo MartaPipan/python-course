@@ -3,13 +3,12 @@ from pathlib import Path
 
 attendance_dir = Path.cwd() / "hw_09_prystatska" / "data" 
 
-# Ств. структуру автоматично
 attendance_dir.mkdir(parents=True, exist_ok=True)
 
-# шлях до CSV, щоб там створити
+# шлях до CSV
 csv_path = attendance_dir / "attendance.csv"
 
-# запис
+
 data_to_save = [
     {"name": "Олена", "group": "КН-11", "attended": "12", "total": "10,14,8,10,5"},
     {"name": "Марко, молодший", "group": "КН-11", "attended": "10", "total": "10,14,12"},
@@ -31,7 +30,7 @@ data_to_save = [
     {"name": "Ян", "group": "КН-11", "attended": "17", "total": "20,17,15,17,18"}, 
 ]
 
-#  Запис у нову папку
+
 with csv_path.open("w", encoding="utf-8", newline="") as file:
     writer = csv.DictWriter(file, fieldnames=["name", "group", "attended", "total"])
     writer.writeheader()

@@ -41,9 +41,13 @@ def import_scores(file_name: str = "scores.csv"):
                 raise KeyError(f"Некоректне значення: (відсутній стовпець 'score')")
             
             for line_number, student_row in enumerate(csv_reader, start=1):
-                # пропускаємо порожній рядок
-                if not any(student_row.values()):
-                    continue
+                is_empty = True
+                for value in student_row.values():
+                    if value and value.strip():  # Якщо значення є і воно не з одних пробілів
+                        is_empty = False
+                        break  
+                    if is_empty:
+                        continue
                 # отримуємо оцінку
                 student_score = student_row.get("score")
                 
