@@ -3,7 +3,7 @@ import sys
 from pathlib import Path
 
 folder_hw_08_prystatska_path = Path.cwd() / "hw_08_prystatska"
-sys.path.append(str(folder_hw_08_prystatska_path))
+sys.path.append(str(folder_hw_08_prystatska_path)) 
 from study_tools.calculations import mean
 
 

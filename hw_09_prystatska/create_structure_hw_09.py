@@ -5,7 +5,6 @@ attendance_dir = Path.cwd() / "hw_09_prystatska" / "data"
 
 attendance_dir.mkdir(parents=True, exist_ok=True)
 
-# шлях до CSV
 csv_path = attendance_dir / "attendance.csv"
 
 

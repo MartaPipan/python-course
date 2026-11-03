@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class DuplicateBookError(ValueError): 
     pass
 
@@ -26,15 +28,15 @@ class Book:
             raise ValueError("Рік має бути коректним числом!")
         
 
-        if year > 2026:  
-            raise ValueError("Рік видання не може бути в майбутньому!")
+        current_year = datetime.now().year
+        if year > current_year:  
+            raise ValueError(f"Рік видання не може бути в майбутньому (більше ніж {current_year})!")
             
         self.title = title.strip()  
         self.author = author.strip()  
         self.year = year  
         self.tags = []  
         
-        # Передаємо залишок аргументів далі по MRO (до Publication)
         super().__init__(**kwargs)  
 
     def add_tag(self, tag: str):  
@@ -91,7 +93,7 @@ class Library:
         search_name = author_name.lower().strip()
    
         for book in self.books:
-            if book.author.lower() == search_name:
+            if search_name in book.author.lower():
                 results.append(book)
         return results
 

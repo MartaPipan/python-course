@@ -1,7 +1,6 @@
 import csv
 from pathlib import Path
 
-# шлях відносно робочої папки
 root_dir = Path.cwd() / "hw_09_prystatska"
 input_path = root_dir / "data" / "attendance.csv"
 output_dir = root_dir / "output"
@@ -30,7 +29,7 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
         exit()
 
     for row in reader:
-        # Пропускає порожні рядки
+        # порожні рядки
         if not any(row[key].strip() for key in REQUIRED_HEADERS if row[key]):
             continue
    
@@ -61,7 +60,7 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
             continue
         attended = int(raw_attended)
 
-        # для Мар'яна - помилка "сімдесять"
+        # "сімдесять"
         total_parts = [part.strip() for part in raw_total.split(",") if part.strip()]
         
         if not total_parts or not all(part.isdigit() for part in total_parts):
@@ -86,7 +85,7 @@ with input_path.open("r", encoding="utf-8", newline="") as file:
         else:
             letters_part = group[0:2]  
             digits_part = group[3:5]   
-            if not letters_part.isalpha() or not digits_part.isdigit():
+            if not letters_part.isalpha() or not letters_part.isupper() or not digits_part.isdigit():
                 is_group_valid = False
 
         if not is_group_valid:
@@ -119,7 +118,7 @@ with summary_csv_path.open("w", encoding="utf-8", newline="") as file:
 print(f"\nРезультати записано.")
 print(f"Згенеровано успішних звітів: {valid_sum}. Знайдено помилок: {len(issues_list)}.")
 
-# Повторно читає створений CSV і перевіряє кількість записів 
+
 print("\n Повторне перевірочне читання створеного CSV")
 verified_count = 0
 with summary_csv_path.open("r", encoding="utf-8", newline="") as file:

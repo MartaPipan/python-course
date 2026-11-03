@@ -1,4 +1,3 @@
-# Файл: models.py
 from dataclasses import dataclass, field
 
 class DuplicateBookError(ValueError):
