@@ -155,3 +155,30 @@ except Exception as error:
 print("\n Перевірка Поліморфізму. Викликаємо метод доставки для ВСІХ книг бібліотеки без перевірки їхнього точного типу:")
 for current_book in library.books:
     print(f"  {current_book.delivery_description()}")
+
+    print(" АВТОМАТИЧНА ОБРОБКА ТА ФІЛЬТРАЦІЯ МАСИВУ ДАНИХ")
+    book_data = [
+        {"title": "Тигролови", "author": "Іван Багряний", "year": "1944", "tags": "пригоди, класика", "type": "printed", "pages_count": 320},
+        {"title": "Місто", "author": "Валер'ян Подмогильний", "year": "1928", "tags": "модернізм", "type": "printed", "pages_count": 290},
+        {"title": "Фелікс Австрія", "author": "Софія Андрухович", "year": "2014", "tags": "історія", "type": "ebook", "download_url": "https://library.com"},
+        # Невалідні дані для перевірки фільтрації:
+        {"title": " ", "author": "Ліна Костенко", "year": "2010", "type": "printed", "pages_count": 150},
+        {"title": "Майбутній вік", "author": "Футурист", "year": "2035", "type": "printed", "pages_count": 200}
+    ]
+
+    print("Запускаємо імпорт та збереження...")
+
+    library.save_valid_books_to_csv(book_data) 
+    
+    print(f"Кількість книг у пам'яті після імпорту: {len(library.books)}\n")
+
+    # 5. Перевірка пошуку та поліморфізму
+    print("--- 4. ПЕРЕВІРКА ПОШУКУ ТА ПОЛІМОРФІЗМУ ---")
+    print("Шукаємо книги автора 'Орвелл':")
+    for b in library.find_by_author("Орвелл"):
+        print(f"   Знайдено: {b.title} | {b.delivery_description()}")
+
+    print("\n" + "=" * 60)
+    print(" ДЕМО ЗАВЕРШЕНО УСПІШНО! Перевірте папку hw_11_prystatska/books.csv")
+    print("=" * 60)
+
